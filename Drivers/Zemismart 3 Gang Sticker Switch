@@ -1,0 +1,137 @@
+/**
+ *  Zemismart 3 Gang Sticker Switch
+ *
+ *  Copyright 2019 at9
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ *  in compliance with the License. You may obtain a copy of the License at:
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+ *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
+ *  for the specific language governing permissions and limitations under the License.
+ *
+ * Modified from code written by  motley74, sticks18 and AnotherUser 
+ * Original sources: https://github.com/motley74/SmartThingsPublic/blob/master/devicetypes/motley74/osram-lightify-dimming-switch.src/osram-lightify-dimming-switch.groovy
+ * https://github.com/AnotherUser17/SmartThingsPublic-1/blob/master/devicetypes/AnotherUser/osram-lightify-4x-switch.src/osram-lightify-4x-switch.groovy
+ */
+
+
+metadata {
+	definition (name: "Zemismart 3 Gang Sticker Switch", namespace: "at9", author: "AT") {
+	
+    capability "Actuator"
+    capability "PushableButton"
+    capability "HoldableButton"
+    capability "DoubleTapableButton"
+    capability "Configuration"
+    capability "Refresh"
+    capability "Sensor"
+       
+    attribute "zMessage", "String"
+		fingerprint endpointId: "03", profileId: "0104", deviceId: "0810", inClusters: "0000, 0001, 0006", outClusters: "0019", manufacturer: "_TYZB02_keyjhapk", model: "TS0042", deviceJoinName: "Zemismart 3x Switch"
+   
+    }
+
+
+
+  tiles(scale: 2) {
+    standardTile("button1", "device.button1", width: 3, height: 3, decoration: "flat") {
+      state "off", label: '${currentValue}', icon: "st.switches.light.off", backgroundColor: "#ffffff"
+      state "on", label: '${currentValue}', icon: "st.switches.light.on", backgroundColor: "#00a0dc"
+    }
+    standardTile("button2", "device.button2", width: 3, height: 3, decoration: "flat") {
+      state "off", label: '${currentValue}', icon: "st.switches.light.off", backgroundColor: "#ffffff"
+      state "on", label: '${currentValue}', icon: "st.switches.light.on", backgroundColor: "#00a0dc"
+    }
+    standardTile("button3", "device.button3", width: 3, height: 3, decoration: "flat") {
+      state "off", label: '${currentValue}', icon: "st.switches.light.off", backgroundColor: "#ffffff"
+      state "on", label: '${currentValue}', icon: "st.switches.light.on", backgroundColor: "#00a0dc"
+    }
+    standardTile("refresh", "device.button", decoration: "flat", width: 2, height: 2) {
+      state "default", label:"", action:"refresh.refresh", icon:"st.secondary.refresh"
+    }
+    main "button1"
+    details(["button1", "button3", "button2", "refresh"])
+  }
+}
+
+def configure() {
+  log.debug "Configuring Reporting and Bindings."
+
+  sendEvent(name: "numberOfButtons", value: 3, displayed: false)
+
+
+  def configCmds = []
+  for (int endpoint=1; endpoint<=3; endpoint++) {
+    def list = ["0006", "0008", "0300"]
+    // the config to the switch
+    for (cluster in list) {
+      configCmds.add("zdo bind 0x${device.deviceNetworkId} 0x0${endpoint} 0x01 0x${cluster} {${device.zigbeeId}} {}")
+    }
+  }
+  return configCmds
+}
+
+// parse events into attributes
+def parse(String description) {
+
+  // Parse incoming device messages to generate events
+
+  def events = null
+  if (description?.startsWith('catchall:')) {
+    // call parseCatchAllMessage to parse the catchall message received
+    events = parseCatchAllMessage(description)
+  } else if (description?.startsWith('read')) {
+    // call parseReadMessage to parse the read message received
+    log.debug "$description" //events = parseReadMessage(description)
+  } else {
+    log.debug "Unknown message received: $description"
+  }
+
+  return events
+}
+
+def refresh() {
+  // read battery level attributes
+      return zigbee.readAttribute(0x0001, 0x0020) + zigbee.configureReporting(0x0001, 0x0020, 0x20, 3600, 21600, 0x01)
+  // this device doesn't support 0021
+      zigbee.readAttribute(0x0001, 0x0021)
+}
+
+
+private Map parseCatchAllMessage(String description) {
+  // Create a map from the raw zigbee message to make parsing more intuitive
+  def msg = zigbee.parse(description)
+      //log.debug msg
+      //log.debug msg.data
+      //log.debug msg.sourceEndpoint
+  switch(msg.sourceEndpoint) {
+     case "1": 
+           button = "2"
+           break
+     case "2": 
+           button = "1"
+           break
+     case "3": 
+           button = "3"
+           break
+    }
+    switch(msg.data) {
+      case "[0]": 
+            name = "pushed" //sendEvent(name: "pushed",value: button, isStateChange:true) 
+            break
+      case "[1]": 
+            name = "doubleTapped" //sendEvent(name: "doubleTapped",value: msg.sourceEndpoint, isStateChange:true)
+            break
+      case "[2]": 
+            name = "held" //sendEvent(name: "held",value: msg.sourceEndpoint, isStateChange:true)
+            break
+    }
+        sendEvent(name: name, value: button, isStateChange:true)
+        log.debug "Button $button $name"
+}
+        
+  
+

@@ -25,33 +25,34 @@ metadata {
 		capability "Battery"
 
 		attribute "lastCheckin", "Date"
-        attribute "lastCheckinEpoch", "String"
-        attribute "lastMotion", "String"
-    	attribute "lastMotionEpoch", "String"
+        	attribute "lastCheckinEpoch", "String"
+        	attribute "lastMotion", "String"
+    		attribute "lastMotionEpoch", "String"
 		attribute "lastInactive", "String"
 		attribute "batteryLastRecharged", "Date"
 
-		//fingerprint for BlitzWolf BW-IS2 Motion Sensor
+	//fingerprint for BlitzWolf BW-IS2 Motion Sensor
         fingerprint profileId: "0104", inClusters: "0000,0003", outClusters: "0003,0019", manufacturer: "_TYST11_i5j6ifxj", model: "5j6ifxj", deviceJoinName: "BlitzWolf BW-IS2 Motion Sensor"
 		
-        command "resetBatteryRechargedDate"
+        	command "resetBatteryRechargedDate"
 		command "resetToMotionInactive"
 	}
 
 	preferences {
-		//Reset to No Motion Config
+	//Reset to No Motion Config
 		input "motionreset", "number", title: "After motion is detected, wait ___ second(s) until resetting to inactive state. Default = 61 seconds (Hardware resets at 60 seconds)", description: "", range: "1..7200"
-        //Logging Message Config
+        
+	//Logging Message Config
  		input name: "infoLogging", type: "bool", title: "Enable info message logging", description: ""
  		input name: "debugLogging", type: "bool", title: "Enable debug message logging", description: ""
-        input name: "Epochdate", type: "bool", title: "Enable Epoch time event logging", description: ""
+        	input name: "Epochdate", type: "bool", title: "Enable Epoch time event logging", description: ""
 	}
 }
 
     
 // Parse incoming device messages to generate events
 def parse(String description) {
-    if (description?.startsWith("catchall:")){
+   	if (description?.startsWith("catchall:")){
     
         if (debugLogging) log.debug "Parsing message: ${description}"
         

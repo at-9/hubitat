@@ -1,0 +1,158 @@
+/**
+ *  BlitzWolf BW-IS2 Motion Sensor
+ *  Device Driver for Hubitat Elevation hub
+ *  Version 0.1
+ *
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ *  in compliance with the License. You may obtain a copy of the License at:
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+ *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
+ *  for the specific language governing permissions and limitations under the License.
+ *
+ *  Modified from xiaomi-motion-sensor-hubitat by veeceeoh
+ *  https://github.com/veeceeoh/xiaomi-hubitat/blob/master/devicedrivers/xiaomi-motion-sensor-hubitat.src/xiaomi-motion-sensor-hubitat.groovy
+ */
+
+
+metadata {
+	definition (name: "BlitzWolf BW-IS2 Motion Sensor", namespace: "at9", author: "at9") {
+		capability "Motion Sensor"
+		capability "Sensor"
+		capability "Battery"
+
+		attribute "lastCheckin", "Date"
+        attribute "lastCheckinEpoch", "String"
+        attribute "lastMotion", "String"
+    	attribute "lastMotionEpoch", "String"
+		attribute "lastInactive", "String"
+		attribute "batteryLastRecharged", "Date"
+
+		//fingerprint for BlitzWolf BW-IS2 Motion Sensor
+        fingerprint profileId: "0104", inClusters: "0000,0003", outClusters: "0003,0019", manufacturer: "_TYST11_i5j6ifxj", model: "5j6ifxj", deviceJoinName: "BlitzWolf BW-IS2 Motion Sensor"
+		
+        command "resetBatteryRechargedDate"
+		command "resetToMotionInactive"
+	}
+
+	preferences {
+		//Reset to No Motion Config
+		input "motionreset", "number", title: "After motion is detected, wait ___ second(s) until resetting to inactive state. Default = 61 seconds (Hardware resets at 60 seconds)", description: "", range: "1..7200"
+        //Logging Message Config
+ 		input name: "infoLogging", type: "bool", title: "Enable info message logging", description: ""
+ 		input name: "debugLogging", type: "bool", title: "Enable debug message logging", description: ""
+        input name: "Epochdate", type: "bool", title: "Enable Epoch time event logging", description: ""
+	}
+}
+
+    
+// Parse incoming device messages to generate events
+def parse(String description) {
+    if (description?.startsWith("catchall:")){
+    
+        if (debugLogging) log.debug "Parsing message: ${description}"
+        
+	    Map map = [:]
+
+	    // Parse motion detected report
+        map = parseMotion()
+        
+        
+    
+    }else { 
+        //If the condition is false print the following statement 
+        if (Epochdate) sendEvent(name: "lastCheckinEpoch", value: now())
+        else  sendEvent(name: "lastCheckin", value: new Date())
+        def descMap = zigbee.parseDescriptionAsMap(description)
+		def cluster = descMap.cluster
+	    def hexValue = descMap.value
+	    def attrId = descMap.attrId
+        //sendEvent(name: "hexval", value: "$hexValue")
+        //if (debugLogging) log.debug "$hexValue"
+      } 
+    
+}       
+        
+// Parse motion active report
+private parseMotion() {
+	def seconds = motionreset ? motionreset : 61
+	// The sensor only sends a motion detected message so reset to motion inactive is performed in code
+	runIn(seconds, resetToMotionInactive)
+	
+    if (Epochdate) sendEvent(name: "lastMotionEpoch", value: now())
+    else sendEvent(name: "lastMotion", value: new Date())
+    
+    def descText = "Motion Detected"
+    return [
+		name: 'motion',
+		value: 'active',
+		isStateChange: true,
+		descriptionText: descText,
+	]
+    if (infoLogging || state.prefsSetCount != 1)
+    log.info("$descText")
+}
+
+// If currently in 'active' motion detected state, resetToMotionInactive() resets to 'inactive' state and displays 'no motion'
+def resetToMotionInactive() {
+	if (device.currentState('motion')?.value == "active") {
+		def seconds = motionreset ? motionreset : 61
+		def descText = "Motion reset to inactive after ${seconds} seconds"
+		//sendEvent(name: "lastMotion", value: now())
+		sendEvent(
+			name:'motion',
+			value:'inactive',
+			isStateChange: true,
+			descriptionText: descText
+		)
+		displayInfoLog(descText)
+        //if (infoLogging || state.prefsSetCount != 1)
+        //log.info("Motion Inactive")
+	}
+}
+
+private def displayDebugLog(message) {
+	if (debugLogging) log.debug "${device.displayName}: ${message}"
+}
+
+private def displayInfoLog(message) {
+	if (infoLogging || state.prefsSetCount != 1)
+		log.info "${device.displayName}: ${message}"
+}
+
+//Reset the batteryLastRecharged date to current date
+def resetBatteryRechargedDate(paired) {
+	def newlyPaired = paired ? " for newly paired sensor" : ""
+	sendEvent(name: "batteryLastRecharged", value: new Date())
+	displayInfoLog("Setting Battery Last Recharged to current date${newlyPaired}")
+}
+
+// installed() runs just after a sensor is paired
+def installed() {
+	state.prefsSetCount = 0
+	displayDebugLog("Installing")
+}
+
+// configure() runs after installed() when a sensor is paired
+def configure() {
+	displayInfoLog("Configuring")
+	init()
+	state.prefsSetCount = 1
+	return
+}
+
+// updated() will run every time user saves preferences
+def updated() {
+	displayInfoLog("Updating preference settings")
+	//init()
+	displayInfoLog("Info message logging enabled")
+	displayDebugLog("Debug message logging enabled")
+}
+
+def init() {
+	if (!device.currentState('batteryLastRecharge')?.value)
+		resetBatteryRechargedDate(true)
+}

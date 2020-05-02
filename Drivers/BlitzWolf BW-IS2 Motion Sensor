@@ -19,7 +19,7 @@
 
 
 metadata {
-	definition (name: "BlitzWolf BW-IS2 Motion Sensor", namespace: "at9", author: "at9") {
+	definition (name: "BlitzWolf BW-IS2 Motion Sensor", namespace: "at9", author: "at9", importUrl: "https://raw.githubusercontent.com/at-9/hubitat/master/Drivers/BlitzWolf%20BW-IS2%20Motion%20Sensor") {
 		capability "Motion Sensor"
 		capability "Sensor"
 		capability "Battery"

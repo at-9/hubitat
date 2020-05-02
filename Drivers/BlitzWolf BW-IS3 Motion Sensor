@@ -1,5 +1,5 @@
 /**
- *  BlitzWolf BW-IS2 Motion Sensor
+ *  BlitzWolf BW-IS3 Motion Sensor
  *  Device Driver for Hubitat Elevation hub
  *  Version 0.1
  *
@@ -19,7 +19,7 @@
 
 
 metadata {
-	definition (name: "BlitzWolf BW-IS2 Motion Sensor", namespace: "at9", author: "at9", importUrl: "https://raw.githubusercontent.com/at-9/hubitat/master/Drivers/BlitzWolf%20BW-IS2%20Motion%20Sensor") {
+	definition (name: "BlitzWolf BW-IS3 Motion Sensor", namespace: "at9", author: "at9", importUrl: "https://raw.githubusercontent.com/at-9/hubitat/master/Drivers/BlitzWolf%20BW-IS2%20Motion%20Sensor") {
 		capability "Motion Sensor"
 		capability "Sensor"
 		capability "Battery"
@@ -31,8 +31,8 @@ metadata {
 		attribute "lastInactive", "String"
 		attribute "batteryLastRecharged", "Date"
 
-	//fingerprint for BlitzWolf BW-IS2 Motion Sensor
-        fingerprint profileId: "0104", inClusters: "0000,0003", outClusters: "0003,0019", manufacturer: "_TYST11_i5j6ifxj", model: "5j6ifxj", deviceJoinName: "BlitzWolf BW-IS2 Motion Sensor"
+	//fingerprint for BlitzWolf BW-IS3 Motion Sensor
+        fingerprint profileId: "0104", inClusters: "0000,0003", outClusters: "0003,0019", manufacturer: "_TYST11_i5j6ifxj", model: "5j6ifxj", deviceJoinName: "BlitzWolf BW-IS3 Motion Sensor"
 		
         	command "resetBatteryRechargedDate"
 		command "resetToMotionInactive"

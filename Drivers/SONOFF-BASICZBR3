@@ -1,0 +1,56 @@
+/**
+ *  SONOFF BASICZBR3
+
+ *  Device Driver for Hubitat Elevation hub
+ *  Version 0.1
+ *
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ *  in compliance with the License. You may obtain a copy of the License at:
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+ *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
+ *  for the specific language governing permissions and limitations under the License.
+ *
+ *  Basically just lifted from the SmartThingsPublic zigbee-switch.groovy removing code not relevant to Hubitat and adding a little
+ *  https://github.com/SmartThingsCommunity/SmartThingsPublic/blob/master/devicetypes/smartthings/zigbee-switch.src/zigbee-switch.groovy
+ */
+metadata {
+	definition (name: "SONOFF BASICZBR3", namespace: "at9", author: "at9",) {
+	  capability "Actuator"
+		capability "Switch"
+    capability "Configuration"
+        
+    fingerprint profileId: "0104", inClusters: "0000,0003,0004,0005,0006", outClusters: "0000", manufacturer: "SONOFF", model: "BASICZBR3", deviceJoinName: "SONOFF BASICZBR3"}
+    
+    preferences {
+        
+        input name: "debugLogging", type: "bool", title: "Enable debug message logging", description: ""
+    }    
+}
+// Parse incoming device messages to generate events
+def parse(String description) {
+	if (debugLogging) log.debug "description is $description"
+	def event = zigbee.getEvent(description)
+	if (event) {
+		sendEvent(event)
+	}
+	else {
+		log.warn "DID NOT PARSE MESSAGE for description : $description"
+		log.debug zigbee.parseDescriptionAsMap(description)
+	}
+}
+
+def off() {
+	zigbee.off()
+}
+
+def on() {
+	zigbee.on()
+}
+
+def configure() {
+	zigbee.onOffRefresh() + zigbee.onOffConfig()
+}

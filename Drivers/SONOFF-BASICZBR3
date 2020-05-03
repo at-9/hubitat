@@ -34,6 +34,7 @@ metadata {
 def parse(String description) {
 	if (debugLogging) log.debug "description is $description"
 	def event = zigbee.getEvent(description)
+	if (debugLogging)log.debug "$event"
 	if (event) {
 		sendEvent(event)
 	}

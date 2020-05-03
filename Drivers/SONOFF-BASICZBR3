@@ -18,10 +18,10 @@
  *  https://github.com/SmartThingsCommunity/SmartThingsPublic/blob/master/devicetypes/smartthings/zigbee-switch.src/zigbee-switch.groovy
  */
 metadata {
-	definition (name: "SONOFF BASICZBR3", namespace: "at9", author: "at9",) {
+	definition (name: "SONOFF BASICZBR3", namespace: "at9", author: "at9", importUrl: "https://raw.githubusercontent.com/at-9/hubitat/master/Drivers/SONOFF-BASICZBR3") {
 	  capability "Actuator"
-		capability "Switch"
-    capability "Configuration"
+	  capability "Switch"
+    	  capability "Configuration"
         
     fingerprint profileId: "0104", inClusters: "0000,0003,0004,0005,0006", outClusters: "0000", manufacturer: "SONOFF", model: "BASICZBR3", deviceJoinName: "SONOFF BASICZBR3"}
     

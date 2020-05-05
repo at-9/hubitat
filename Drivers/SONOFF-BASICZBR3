@@ -2,7 +2,7 @@
  *  SONOFF BASICZBR3
 
  *  Device Driver for Hubitat Elevation hub
- *  Version 0.1
+ *  Version 0.2
  *
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -13,6 +13,9 @@
  *  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
  *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
  *  for the specific language governing permissions and limitations under the License.
+ *
+ *	V 1.1 Updated zigbee commands for endpointId not being set. @markus-li
+ *	V 1.0 Initial
  *
  *  Basically just lifted from the SmartThingsPublic zigbee-switch.groovy removing code not relevant to Hubitat and adding a little
  *  https://github.com/SmartThingsCommunity/SmartThingsPublic/blob/master/devicetypes/smartthings/zigbee-switch.src/zigbee-switch.groovy
@@ -45,11 +48,11 @@ def parse(String description) {
 }
 
 def off() {
-	zigbee.off()
+	def cmd = ["he cmd ${device.deviceNetworkId} 0x01 6 0 {}"]
 }
 
 def on() {
-	zigbee.on()
+	def cmd = ["he cmd ${device.deviceNetworkId} 0x01 6 1 {}"]
 }
 
 def configure() {

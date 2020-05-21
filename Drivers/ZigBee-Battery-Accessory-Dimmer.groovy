@@ -11,14 +11,14 @@
  *	on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
  *	for the specific language governing permissions and limitations under the License.
  *
- * Based on ZigBee Battery Accessory Dimmer by smartthings adapted for Hubitat Elevation by at9
- * Original source :https://github.com/SmartThingsCommunity/SmartThingsPublic/blob/master/devicetypes/smartthings/zigbee-battery-accessory-dimmer.src/zigbee-battery-accessory-dimmer.groovy
+ *   Based on ZigBee Battery Accessory Dimmer by smartthings adapted for Hubitat Elevation by at9
+ *   Original source :https://github.com/SmartThingsCommunity/SmartThingsPublic/blob/master/devicetypes/smartthings/zigbee-battery-accessory-dimmer.src/zigbee-battery-accessory-dimmer.groovy
  * 
- * Changes:
- * Removed Tiles
- * Added in Pushable buttons for Sengled Smart Switch
- * Added in debug logging toggle
- * Added in user input for change in dimming levels
+ *   Changes:
+ *   Removed Tiles
+ *   Added in Pushable buttons for Sengled Smart Switch
+ *   Added in debug logging toggle
+ *   Added in user input for change in dimming levels
  */
 
 import hubitat.zigbee.zcl.DataType

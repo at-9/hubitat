@@ -12,7 +12,7 @@
  *	for the specific language governing permissions and limitations under the License.
  *
  *   Based on ZigBee Battery Accessory Dimmer by smartthings adapted for Hubitat Elevation by at9
- *   Original source :https://github.com/SmartThingsCommunity/SmartThingsPublic/blob/master/devicetypes/smartthings/zigbee-battery-accessory-dimmer.src/zigbee-battery-accessory-dimmer.groovy
+ *   Original source: https://github.com/SmartThingsCommunity/SmartThingsPublic/blob/master/devicetypes/smartthings/zigbee-battery-accessory-dimmer.src/zigbee-battery-accessory-dimmer.groovy
  * 
  *   Changes:
  *   Removed Tiles

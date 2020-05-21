@@ -30,7 +30,7 @@ metadata {
 		capability "Configuration"
 		capability "Switch"
 		capability "Switch Level"
-        capability "PushableButton"
+        	capability "PushableButton"
 
 		// Sengled Switch is moved to the CST because of issues with battery reports so our way to resolve this is to hide the battery in OneApp by using metadata without it.
 		fingerprint profileId: "0104", inClusters: "0000,0001,0003,0020,FC11", outClusters: "0003,0004,0006,0008,FC10", manufacturer: "sengled", model: "E1E-G7F", deviceJoinName: "Sengled Smart Switch", mnmn:"SmartThings", vid: "generic-dimmer"

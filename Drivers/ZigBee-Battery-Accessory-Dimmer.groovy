@@ -24,7 +24,7 @@
 import hubitat.zigbee.zcl.DataType
 
 metadata {
-	definition (name: "ZigBee Battery Accessory Dimmer WIP", namespace: "at9", author: "at9", ocfDeviceType: "oic.d.switch",importUrl: "https://raw.githubusercontent.com/at-9/hubitat/master/Drivers/ZigBee-Battery-Accessory-Dimmer.groovy") {
+	definition (name: "ZigBee Battery Accessory Dimmer WIP", namespace: "at9", author: "at9", ocfDeviceType: "oic.d.switch", importUrl: "https://raw.githubusercontent.com/at-9/hubitat/master/Drivers/ZigBee-Battery-Accessory-Dimmer.groovy") {
 		capability "Actuator"
 		capability "Battery"
 		capability "Configuration"

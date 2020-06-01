@@ -70,7 +70,8 @@ def off(){
     finished()
 } 
 def updated(){
-       
+    
+    unschedule()    
     delay()
 }
 def installed(){

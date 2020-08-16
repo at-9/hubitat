@@ -32,7 +32,7 @@ preferences {
 
 def both() {
     
-       sendEvent(name: "alaram", value: "both")
+       sendEvent(name: "alarm", value: "both")
 
        runIn(state.delay,"off",[overwrite: true])
 
@@ -41,14 +41,14 @@ def both() {
 
 void siren(){
        
-       sendEvent(name: "alaram", value: "siren")
+       sendEvent(name: "alarm", value: "siren")
 
        runIn(state.delay,"off",[overwrite: true])
 }
 
 void strobe(){
        
-       sendEvent(name: "alaram", value: "strobe")
+       sendEvent(name: "alarm", value: "strobe")
 
        runIn(state.delay,"off",[overwrite: true])
 }
@@ -58,7 +58,7 @@ void delay(){
 }
 def off(){
        
-    sendEvent(name: "alaram", value: "off")
+    sendEvent(name: "alarm", value: "off")
 } 
 def updated(){
        

@@ -2,7 +2,7 @@
 /**
  *  Virtual Siren
  *	Device Driver for Hubitat Elevation
- *   	V0.1
+ *   	V0.2 Don't code when drunk
  *
  *	Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *	in compliance with the License. You may obtain a copy of the License at:

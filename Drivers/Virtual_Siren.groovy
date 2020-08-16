@@ -16,7 +16,7 @@
 
 
 metadata {
-    definition(name: "Virtual Siren", namespace: "at9", author: "at9", importUrl: "") {
+    definition(name: "Virtual Siren", namespace: "at9", author: "at9", importUrl: "https://raw.githubusercontent.com/at-9/hubitat/master/Drivers/Virtual_Siren.groovy") {
         capability "Actuator"
         capability "Alarm"
 
